@@ -53,3 +53,28 @@ var saveSelection = function(){
     });
   });
 };
+
+chrome.extension.onMessage.addListener(
+  function(request, sender, callback) {
+    console.log(request, sender, callback);
+    if(request.action === 'openQuote') {
+      openTabAndFindQuote(request);
+    }
+  }
+);
+
+var openTabAndFindQuote = function(request) {
+  chrome.tabs.create(
+    {
+      url: request.url
+    },
+    function(tab) {
+      chrome.tabs.get(tab.id, function() {
+        chrome.tabs.executeScript(
+          tab.id,
+          { code: "window.find('"+request.quote+"')" }
+        );
+      });
+    }
+  );
+};

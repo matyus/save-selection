@@ -3,7 +3,7 @@
   "name": "My Extension",
   "version": "2.0",
   "description": "Console logs",
-  "icons": { 
+  "icons": {
     "128": "icon_128.png",
     "16": "icon_16.png"
   },
@@ -23,6 +23,7 @@
   "permissions": [
     "https://en.wikipedia.org/*",
     "http://en.wikipedia.org/*",
+    "activeTab",
     "tabs",
     "clipboardRead",
     "contextMenus",
@@ -35,5 +36,12 @@
     "default_title": "FOOBAR",
     "default_icon": "icon_16.png",
     "default_popup": "display.html"
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["find.js"]
+  }],
+  "externally_connectable": {
+    "matches": ["*://*.wikipedia.org/*"]
   }
 }
