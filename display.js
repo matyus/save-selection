@@ -8,10 +8,17 @@ var renderTemplate = function(templateData) {
       } else {
         var template = quoteTemplate || templateData;
         chrome.storage.local.get(null, function(data){
-          console.log('data',data); 
+          console.log('data',data);
           for(quote in data) {
             var obj = JSON.parse(data[quote]);
-            var render = template.replace(/\$title/, obj.title).replace(/\$url/g, obj.url).replace(/\$text/, obj.text).replace(/\$date/,moment(+quote).format('LLL') + ' (' + moment(+quote).fromNow() + ')');
+            var stftime = moment(+quote).format('LLL')
+                            + ' (' + moment(+quote).fromNow() + ')';
+
+            var render = template.replace(/\$title/, obj.title)
+                                  .replace(/\$url/g, obj.url)
+                                  .replace(/\$text/g, obj.text)
+                                  .replace(/\$date/, stftime);
+
             scope.innerHTML += render;
           }
         });
@@ -19,7 +26,7 @@ var renderTemplate = function(templateData) {
 };
 var init = function() {
   console.log('init');
-  
+
   scope = scope || document.getElementById('data');
 
   $.ajax({
@@ -32,7 +39,17 @@ var init = function() {
 
       $('a').live('click', function(e) {
         e.preventDefault();
-        chrome.tabs.create({url: $(this).attr('href')});
+        var $this = $(this);
+        chrome.runtime.sendMessage(
+          {
+            action: 'openQuote',
+            url: $this.attr('href'),
+            quote: $this.data('quote')
+          },
+          function(response) {
+            console.log('response from background', response);
+          }
+        );
       });
      }
   });
