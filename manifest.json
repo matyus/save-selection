@@ -4,8 +4,8 @@
   "version": "2.0",
   "description": "Oboy oboy!",
   "icons": {
-    "128": "icons/icon_128.png",
-    "16": "icons/icon_16.png"
+    "128": "icons/iconmonstr-quote-9-icon-128.png",
+    "16": "icons/iconmonstr-quote-9-icon-32.png"
   },
   "background": {
     "persistent": false,
@@ -33,7 +33,7 @@
   ],
   "browser_action": {
     "default_title": "Oboy",
-    "default_icon": "icons/icon_16.png",
+    "default_icon": "icons/iconmonstr-quote-9-icon-32.png",
     "default_popup": "popup.html"
   },
   "content_scripts": [{

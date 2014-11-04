@@ -2,7 +2,7 @@
 
 (function(ng) {
   var app = ng.module('APP');
-  
+
   app.directive('quote-template', function(){
     return {
       restrict: 'E',
