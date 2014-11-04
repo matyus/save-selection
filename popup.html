@@ -1,0 +1,31 @@
+<!doctype html>
+<html ng-app="APP" ng-csp>
+  <head>
+    <link href="css/display.css" media="all" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+    <header>
+      <nav ng-controller="NavCtrl" style="float:right;">
+        <button ng-click="deleteAll()">Clobber</button>
+      </nav>
+      <h1>Saved Selections</h1>
+    </header>
+    <div class="QuoteCtrl">
+      <article ng-repeat="(createdOn, quote) in quotes" data="quote" date="createdOn" ng-controller="ActionsCtrl">
+        <button ng-click="deleteItem(createdOn)" style="float:right;">Delete</button>
+        <h3>{{createdOn | date : 'MMM d, y h:mm:ss a'}}</h3>
+        <blockquote>
+          <p>{{quote.text}}</p>
+          <p>via <a ng-href="{{quote.url}}" ng-click="openSavedSelection($event)" data-href="{{quote.url}}" title="{{quote.title}}" data-quote="{{quote.text}}">{{quote.title}}</button>
+
+        </blockquote>
+      </article>
+    </div>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/service.js"></script>
+    <script src="js/directive.js"></script>
+    <script src="js/controller.js"></script>
+  </body>
+</html>

@@ -1,28 +1,27 @@
 {
   "manifest_version": 2,
-  "name": "My Extension",
+  "name": "Oboy",
   "version": "2.0",
-  "description": "Console logs",
+  "description": "Oboy oboy!",
   "icons": {
-    "128": "icon_128.png",
-    "16": "icon_16.png"
+    "128": "icons/icon_128.png",
+    "16": "icons/icon_16.png"
   },
   "background": {
     "persistent": false,
-    "scripts": ["background.js"]
+    "scripts": ["js/background.js"]
   },
   "commands" : {
     "save-selection": {
       "global": true,
-      "description": "Save a highlighted selection of text",
+      "description": "Save a highlighted selection of text, oboy!",
       "suggested_key": {
         "default": "Ctrl+Shift+8"
       }
     }
   },
   "permissions": [
-    "https://en.wikipedia.org/*",
-    "http://en.wikipedia.org/*",
+    "<all_urls>",
     "activeTab",
     "tabs",
     "clipboardRead",
@@ -33,15 +32,12 @@
     "storage"
   ],
   "browser_action": {
-    "default_title": "FOOBAR",
-    "default_icon": "icon_16.png",
-    "default_popup": "display.html"
+    "default_title": "Oboy",
+    "default_icon": "icons/icon_16.png",
+    "default_popup": "popup.html"
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["find.js"]
-  }],
-  "externally_connectable": {
-    "matches": ["*://*.wikipedia.org/*"]
-  }
+    "js": ["js/find.js"]
+  }]
 }

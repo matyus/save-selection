@@ -12,11 +12,11 @@ chrome.contextMenus.onClicked.addListener(function($event,tab){
   var quote = {};
   var createdOn = new Date().getTime();
 
-  quote[createdOn] = JSON.stringify({
+  quote[createdOn] = {
     text: $event.selectionText,
     title: tab.title,
     url: tab.url
-  });
+  };
 
   chrome.storage.local.set(quote, function(item){
     console.log('saved',item);
