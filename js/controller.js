@@ -54,6 +54,22 @@
           });
         });
       }
+
+      $scope.emailItem = function (key, quote) {
+        storageService.getQuote(key).then(function () {
+          runtime.sendMessage(
+            {
+              action: 'emailQuote',
+              quote: quote.text,
+              title: quote.title,
+              url: quote.url
+            },
+            function(response) {
+              consolelog('response to emailItem request', response);
+            }
+          );
+        });
+      }
     }
   ]);
 

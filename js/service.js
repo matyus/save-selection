@@ -9,10 +9,29 @@
 
         return({
           addQuote: addQuote,
+          getQuote: getQuote,
           getQuotes: getQuotes,
           removeQuote: removeQuote,
           removeQuotes: removeQuotes
         });
+
+        function getQuote (key) {
+          console.log('get quote');
+
+          var deferred = $q.defer();
+
+          deferred.notify('Getting quote');
+
+          db.get(key, function(data){
+            if(chrome.runtime.lastError) {
+              deferred.reject();
+            } else {
+              deferred.resolve(data);
+            }
+          });
+
+          return deferred.promise;
+        };
 
         function getQuotes () {
           console.log('get quotes'); 

@@ -7,12 +7,13 @@
   <body>
     <header>
       <nav ng-controller="NavCtrl" style="float:right;">
-        <button ng-click="deleteAll()">Clobber</button>
+        <button ng-click="deleteAll()">Delete All</button>
       </nav>
-      <h1>Saved Selections</h1>
+      <h1>Matyus</h1>
     </header>
     <div class="QuoteCtrl">
       <article ng-repeat="(createdOn, quote) in quotes" data="quote" date="createdOn" ng-controller="ActionsCtrl">
+        <button ng-click="emailItem(createdOn, quote)" style="float:right;">Email</button>
         <button ng-click="deleteItem(createdOn)" style="float:right;">Delete</button>
         <h3>{{createdOn | date : 'MMM d, y h:mm:ss a'}}</h3>
         <blockquote>

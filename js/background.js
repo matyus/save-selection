@@ -57,9 +57,16 @@ var saveSelection = function(){
 chrome.extension.onMessage.addListener(
   function(request, sender, callback) {
     console.log(request, sender, callback);
-    if(request.action === 'openQuote') {
-      openTabAndFindQuote(request);
+    switch(request.action) {
+      case 'emailQuote':
+        openTabAndCreateEmail(request);
+        break;
+      default:
+        openTabAndFindQuote(request);
     }
+    /*if(request.action === 'openQuote') {
+      openTabAndFindQuote(request);
+    }*/
   }
 );
 
@@ -74,6 +81,19 @@ var openTabAndFindQuote = function(request) {
           tab.id,
           { code: "window.find('"+request.quote+"')" }
         );
+      });
+    }
+  );
+};
+
+var openTabAndCreateEmail = function(request) {
+  chrome.tabs.create(
+    {
+      url: 'https://mail.google.com/mail/?view=cm&su='+ encodeURIComponent('[excerpt]')+'&body=' + encodeURIComponent(request.title+'\n\n“'+request.quote+'”\n\n'+'via '+request.url)
+    },
+    function(tab) {
+      chrome.tabs.get(tab.id, function() {
+
       });
     }
   );

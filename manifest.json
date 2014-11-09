@@ -4,7 +4,7 @@
   "version": "2.0",
   "description": "Oboy oboy!",
   "icons": {
-    "128": "icons/iconmonstr-quote-9-icon-128.png",
+    "128": "icons/iconmonstr-quote-9-icon-256.png",
     "16": "icons/iconmonstr-quote-9-icon-32.png"
   },
   "background": {
