@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Oboy",
+  "name": "Matyus",
   "version": "2.0",
-  "description": "Oboy oboy!",
+  "description": "Right Click (Command + Click) > Save Selection",
   "icons": {
     "128": "icons/iconmonstr-quote-9-icon-256.png",
     "16": "icons/iconmonstr-quote-9-icon-32.png"
@@ -32,7 +32,7 @@
     "storage"
   ],
   "browser_action": {
-    "default_title": "Oboy",
+    "default_title": "Open saved Selections",
     "default_icon": "icons/iconmonstr-quote-9-icon-32.png",
     "default_popup": "popup.html"
   },
