@@ -7,19 +7,19 @@
   <body>
     <header>
       <nav ng-controller="NavCtrl" style="float:right;">
-        <button ng-click="deleteAll()">Delete All</button>
+        <button class="delete" ng-click="deleteAll()">Delete All</button>
       </nav>
       <h1>Matyus</h1>
     </header>
     <div class="QuoteCtrl">
       <article ng-repeat="(createdOn, quote) in quotes" data="quote" date="createdOn" ng-controller="ActionsCtrl">
-        <button ng-click="emailItem(createdOn, quote)" style="float:right;">Email</button>
-        <button ng-click="deleteItem(createdOn)" style="float:right;">Delete</button>
+        <button class="delete" ng-click="deleteItem(createdOn)" style="float:right;">Delete</button>
+        <button title="Open Source in a new Tab" ng-click="openSavedSelection(createdOn)" style="float:right;">Source</button>
+        <button title="Open quote in Gmail" ng-click="emailItem(createdOn)" style="float:right;">Email</button>
         <h3>{{createdOn | date : 'MMM d, y h:mm:ss a'}}</h3>
         <blockquote>
-          <p>{{quote.text}}</p>
-          <p>via <a ng-href="{{quote.url}}" ng-click="openSavedSelection($event)" data-href="{{quote.url}}" title="{{quote.title}}" data-quote="{{quote.text}}">{{quote.title}}</button>
-
+          <p ng-bind-html="quote.$el||quote.text">{{quote.$el || quote.text}}</p>
+          <p>via <a ng-href="{{quote.url}}" ng-click="openSavedSelection(createdOn)">{{quote.title}}</button>
         </blockquote>
       </article>
     </div>

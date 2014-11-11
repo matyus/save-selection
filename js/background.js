@@ -1,3 +1,4 @@
+var key,quote;
 var parentMenu = chrome.contextMenus.create({
   "contexts": ["all"],
   "id": "parent",
@@ -9,18 +10,18 @@ chrome.contextMenus.onClicked.addListener(function($event,tab){
   console.log('e',$event, $event.selectionText);
   console.log('t',tab);
 
-  var quote = {};
-  var createdOn = new Date().getTime();
+  chrome.tabs.sendMessage(tab.id, 'getSelection', function(response){
+    console.log('aaah',response);
+    var quote = {};
+    var createdOn = new Date().getTime();
 
-  quote[createdOn] = {
-    text: $event.selectionText,
-    title: tab.title,
-    url: tab.url
-  };
+    quote[createdOn] = response;
 
-  chrome.storage.local.set(quote, function(item){
-    console.log('saved',item);
+    chrome.storage.local.set(quote, function(){
+      console.log('selection saved');
+    });
   });
+
 });
 
 chrome.browserAction.onClicked.addListener(function(tab){
@@ -40,6 +41,7 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 });
 
 chrome.commands.onCommand.addListener(function(eventName) {
+  console.log('onCommand');
   if(eventName === 'save-selection') {
     saveSelection();
   }
@@ -56,45 +58,57 @@ var saveSelection = function(){
 
 chrome.extension.onMessage.addListener(
   function(request, sender, callback) {
-    console.log(request, sender, callback);
+    console.log('bg onMessage', request, sender);
     switch(request.action) {
       case 'emailQuote':
         openTabAndCreateEmail(request);
         break;
-      default:
+      case 'openQuote':
+        console.log('open', request, sender);
         openTabAndFindQuote(request);
+        break;
+      case 'findQuote':
+        findQuote(sender);
+        break;
+      case 'saveSelection':
+        console.log('SAVE', request, sender, callback);
+        break;
+      default:
+        console.log('nothing happened');
     }
-    /*if(request.action === 'openQuote') {
-      openTabAndFindQuote(request);
-    }*/
   }
 );
+var findQuote = function(request) {
+  var tab = request.tab;
+  console.log('!!!', quote);
+  chrome.tabs.executeScript(tab.id, {
+    code: 'window.find("$");'.replace('$',quote.text)
+  });
+};
 
 var openTabAndFindQuote = function(request) {
+  key = quote = request.quote;
   chrome.tabs.create(
     {
-      url: request.url
+      url: quote.url
     },
     function(tab) {
       chrome.tabs.get(tab.id, function() {
         chrome.tabs.executeScript(
           tab.id,
-          { code: "window.find('"+request.quote+"')" }
+          { code: "window.find('"+quote.text+"');" }
         );
       });
     }
   );
 };
 
-var openTabAndCreateEmail = function(request) {
-  chrome.tabs.create(
-    {
-      url: 'https://mail.google.com/mail/?view=cm&su='+ encodeURIComponent('[excerpt]')+'&body=' + encodeURIComponent(request.title+'\n\n“'+request.quote+'”\n\n'+'via '+request.url)
-    },
-    function(tab) {
-      chrome.tabs.get(tab.id, function() {
+var openTabAndCreateEmail = function(response) {
+  var quote = response.quote;
 
-      });
-    }
-  );
+  chrome.tabs.create({
+    url: 'https://mail.google.com/mail/?view=cm&su='
+      + encodeURIComponent('[excerpt]')+'&body=' 
+      + encodeURIComponent(quote.title+'\n\n“'+ quote.text +'”\n\n' + 'via '+quote.url)
+  });
 };

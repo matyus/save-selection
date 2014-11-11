@@ -3,6 +3,12 @@
 (function (ng, runtime) {
   var app = ng.module('APP');
 
+  app.config(function($sceProvider) {
+    //Completely disable SCE.  For demonstration purposes only!
+    // Do not use in new projects.
+    $sceProvider.enabled(false);
+  });
+
   app.controller('QuoteCtrl', [
     '$scope', '$rootScope', '$log', 'storageService',
     function ($scope, $rootScope, $log, storageService) {
@@ -17,13 +23,13 @@
   ]);
 
   app.controller('NavCtrl', [
-    '$scope', '$rootScope', 'storageService', 
-    function ($scope, $rootScope, storageService) {
+    '$sce', '$scope', '$rootScope', 'storageService', 
+    function ($sce, $scope, $rootScope, storageService) {
       $scope.deleteAll = function() {
         console.log('d');
         storageService.removeQuotes().then(function(){
            storageService.getQuotes().then(function(success){
-            $rootScope.quotes = success;
+            $rootScope.quotes = $sce.trustAsHtml(success);
            });
         });
       };
@@ -31,20 +37,16 @@
   ]);
 
   app.controller('ActionsCtrl', [
-    '$scope', '$rootScope', 'storageService', 
-    function ($scope, $rootScope, storageService) {
-      $scope.openSavedSelection = function ($event) {
-        var $this = $event;
-        runtime.sendMessage(
-          {
+    '$sce', '$scope', '$rootScope', 'storageService', 
+    function ($sce, $scope, $rootScope, storageService) {
+      $scope.openSavedSelection = function (key) {
+        storageService.getQuote(key).then(function(response){
+          var quote = response[key];
+          runtime.sendMessage({
             action: 'openQuote',
-            url: $this.currentTarget.dataset.href,
-            quote: $this.currentTarget.dataset.quote
-          },
-          function(response) {
-            console.log('response from background', response);
-          }
-        );
+            quote: quote
+          });
+        });
       };
 
       $scope.deleteItem = function (key) {
@@ -55,19 +57,13 @@
         });
       }
 
-      $scope.emailItem = function (key, quote) {
-        storageService.getQuote(key).then(function () {
-          runtime.sendMessage(
-            {
-              action: 'emailQuote',
-              quote: quote.text,
-              title: quote.title,
-              url: quote.url
-            },
-            function(response) {
-              consolelog('response to emailItem request', response);
-            }
-          );
+      $scope.emailItem = function (key) {
+        storageService.getQuote(key).then(function (response) {
+          var quote = response[key];
+          runtime.sendMessage({
+            action: 'emailQuote',
+            quote: quote
+          });
         });
       }
     }
