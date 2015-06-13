@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "Matyus",
+  "name": "Save Selection",
   "version": "2.0",
   "description": "Right Click (Command + Click) > Save Selection",
   "icons": {

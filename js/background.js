@@ -7,21 +7,10 @@ var parentMenu = chrome.contextMenus.create({
 });
 
 chrome.contextMenus.onClicked.addListener(function($event,tab){
-  console.log('e',$event, $event.selectionText);
-  console.log('t',tab);
-
   chrome.tabs.sendMessage(tab.id, 'getSelection', function(response){
     console.log('aaah',response);
-    var quote = {};
-    var createdOn = new Date().getTime();
-
-    quote[createdOn] = response;
-
-    chrome.storage.local.set(quote, function(){
-      console.log('selection saved');
-    });
+    storageService.addQuote(response);
   });
-
 });
 
 chrome.browserAction.onClicked.addListener(function(tab){
